@@ -11,7 +11,7 @@ all_sprites = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
-    fullname = os.path.join('', name)
+    fullname = os.path.join('/Users/roman/PycharmProjects/pythonProject10', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
@@ -48,11 +48,18 @@ class Black_Pawn(pygame.sprite.Sprite):
                 sl['xod'].append((x, y + 2))
         if board[y + 1][x] == 0:
             sl['xod'].append((x, y + 1))
+        #кушаем
+        if board[y + 1][x + 1] != 0:
+            if type(board[y + 1][x + 1]) not in black_f:
+                sl['eat'].append((x + 1, y + 1))
+        if board[y + 1][x - 1] != 0:
+            if type(board[y + 1][x - 1]) not in black_f:
+                sl['eat'].append((x - 1, y + 1))
         return sl
 
 
 class White_Pawn(pygame.sprite.Sprite):
-    image = load_image("Белая пешка.jpg", -1)
+    image = load_image("Белая пешка.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -64,6 +71,22 @@ class White_Pawn(pygame.sprite.Sprite):
     def set_cord(self, x, y):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
+
+    def true_xod(self, board, x, y):
+        sl = {'xod': [], 'eat': []}  # проверка выхода за границы
+        if y == 6:
+            if board[y - 1][x] == 0 and board[y - 2][x] == 0:
+                sl['xod'].append((x, y - 2))
+        if board[y - 1][x] == 0:
+            sl['xod'].append((x, y - 1))
+        #кушаем
+        if board[y - 1][x + 1] != 0:
+            if type(board[y - 1][x + 1]) not in white_f:
+                sl['eat'].append((x + 1, y - 1))
+        if board[y - 1][x - 1] != 0:
+            if type(board[y - 1][x - 1]) not in white_f:
+                sl['eat'].append((x - 1, y - 1))
+        return sl
 
 ######################
 #####################
@@ -101,6 +124,31 @@ class Black_Knight(pygame.sprite.Sprite):
             sl['xod'].append((x - 2, y - 1))
         if (y - 1 >= 0) and (x + 2 < 8) and board[y - 1][x + 2] == 0:
             sl['xod'].append((x + 2, y - 1))
+            # кушаем
+        if (y + 2 < 8) and (x + 1 < 8) and (board[y + 2][x + 1] != 0):
+            if type(board[y + 2][x + 1]) not in black_f:
+                sl['eat'].append((x + 1, y + 2))
+        if (y + 2 < 8) and (x - 1 >= 0) and board[y + 2][x - 1] != 0:
+            if type(board[y + 2][x - 1]) not in black_f:
+                sl['eat'].append((x - 1, y + 2))
+        if (y + 1 < 8) and (x - 2 >= 0) and board[y + 1][x - 2] != 0:
+            if type(board[y + 1][x - 2]) not in black_f:
+                sl['eat'].append((x - 2, y + 1))
+        if (y + 1 < 8) and (x + 2 < 8) and board[y + 1][x + 2] != 0:
+            if type(board[y + 1][x + 2]) not in black_f:
+                sl['eat'].append((x + 2, y + 1))
+        if (y - 2 >= 0) and (x + 1 < 8) and board[y - 2][x + 1] != 0:
+            if type(board[y - 2][x + 1]) not in black_f:
+                sl['eat'].append((x + 1, y - 2))
+        if (y - 2 >= 0) and (x - 1 >= 0) and board[y - 2][x - 1] != 0:
+            if type(board[y - 2][x - 1]) not in black_f:
+                sl['eat'].append((x - 1, y - 2))
+        if (y - 1 >= 0) and (x - 2 >= 0) and board[y - 1][x - 2] != 0:
+            if type(board[y - 1][x - 2]) not in black_f:
+                sl['eat'].append((x - 2, y - 1))
+        if (y - 1 >= 0) and (x + 2 < 8) and board[y - 1][x + 2] != 0:
+            if type(board[y - 1][x + 2]) not in black_f:
+                sl['eat'].append((x + 2, y - 1))
         return sl
 
 
@@ -118,6 +166,51 @@ class White_Knight(pygame.sprite.Sprite):
     def set_cord(self, x, y):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
+
+    def true_xod(self, board, x, y):
+        sl = {'xod': [], 'eat': []} # проверка выхода за границы
+        if (y + 2 < 8) and (x + 1 < 8) and (board[y + 2][x + 1] == 0):
+            sl['xod'].append((x + 1, y + 2))
+        if (y + 2 < 8) and (x - 1 >= 0) and board[y + 2][x - 1] == 0:
+            sl['xod'].append((x - 1, y + 2))
+        if (y + 1 < 8) and (x - 2 >= 0) and board[y + 1][x - 2] == 0:
+            sl['xod'].append((x - 2, y + 1))
+        if (y + 1 < 8) and (x + 2 < 8) and board[y + 1][x + 2] == 0:
+            sl['xod'].append((x + 2, y + 1))
+        if (y - 2 >= 0) and (x + 1 < 8) and board[y - 2][x + 1] == 0:
+            sl['xod'].append((x + 1, y - 2))
+        if (y - 2 >= 0) and (x - 1 >= 0) and board[y - 2][x - 1] == 0:
+            sl['xod'].append((x - 1, y - 2))
+        if (y - 1 >= 0) and (x - 2 >= 0) and board[y - 1][x - 2] == 0:
+            sl['xod'].append((x - 2, y - 1))
+        if (y - 1 >= 0) and (x + 2 < 8) and board[y - 1][x + 2] == 0:
+            sl['xod'].append((x + 2, y - 1))
+            # кушаем
+        if (y + 2 < 8) and (x + 1 < 8) and (board[y + 2][x + 1] != 0):
+            if type(board[y + 2][x + 1]) not in white_f:
+                sl['eat'].append((x + 1, y + 2))
+        if (y + 2 < 8) and (x - 1 >= 0) and board[y + 2][x - 1] != 0:
+            if type(board[y + 2][x - 1]) not in white_f:
+                sl['eat'].append((x - 1, y + 2))
+        if (y + 1 < 8) and (x - 2 >= 0) and board[y + 1][x - 2] != 0:
+            if type(board[y + 1][x - 2]) not in white_f:
+                sl['eat'].append((x - 2, y + 1))
+        if (y + 1 < 8) and (x + 2 < 8) and board[y + 1][x + 2] != 0:
+            if type(board[y + 1][x + 2]) not in white_f:
+                sl['eat'].append((x + 2, y + 1))
+        if (y - 2 >= 0) and (x + 1 < 8) and board[y - 2][x + 1] != 0:
+            if type(board[y - 2][x + 1]) not in white_f:
+                sl['eat'].append((x + 1, y - 2))
+        if (y - 2 >= 0) and (x - 1 >= 0) and board[y - 2][x - 1] != 0:
+            if type(board[y - 2][x - 1]) not in white_f:
+                sl['eat'].append((x - 1, y - 2))
+        if (y - 1 >= 0) and (x - 2 >= 0) and board[y - 1][x - 2] != 0:
+            if type(board[y - 1][x - 2]) not in white_f:
+                sl['eat'].append((x - 2, y - 1))
+        if (y - 1 >= 0) and (x + 2 < 8) and board[y - 1][x + 2] != 0:
+            if type(board[y - 1][x + 2]) not in white_f:
+                sl['eat'].append((x + 2, y - 1))
+        return sl
 
 
 #################
@@ -138,6 +231,61 @@ class Black_Bishop(pygame.sprite.Sprite):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
 
+    def true_xod(self, board, x, y):
+        print(x, y)
+        sl = {'xod': [], 'eat': []}  # проверка выхода за границы + еда чужих
+        y1 = y
+        for i in range(x + 1, 8):
+            y1 += 1
+            if y1 < 8 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 < 8:
+                if type(board[y1][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        y1 = y
+        for i in range(x + 1, 8):
+            y1 -= 1
+            if y1 >= 0 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 >= 0:
+                if type(board[y1][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        y1 = y
+        for i in range(x - 1, -1, -1):
+            y1 += 1
+            if y1 < 8 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+                #print('x', board[y1][i], (i, y1))
+            elif y1 < 8:
+                if type(board[y1][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    #print('e', board[y1][i], (i, y1))
+                    break
+
+        y1 = y
+        for i in range(x - 1, -1, -1):
+            y1 -= 1
+            if y1 >= 0 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 >= 0:
+                if type(board[y1][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+        return sl
+###############################################################################
+
 
 class White_Bishop(pygame.sprite.Sprite):
     image = load_image("Белый слон.png", -1)
@@ -152,6 +300,60 @@ class White_Bishop(pygame.sprite.Sprite):
     def set_cord(self, x, y):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
+
+    def true_xod(self, board, x, y):
+        print(x, y)
+        sl = {'xod': [], 'eat': []}  # проверка выхода за границы + еда чужих
+        y1 = y
+        for i in range(x + 1, 8):
+            y1 += 1
+            if y1 < 8 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 < 8:
+                if type(board[y1][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        y1 = y
+        for i in range(x + 1, 8):
+            y1 -= 1
+            if y1 >= 0 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 >= 0:
+                if type(board[y1][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        y1 = y
+        for i in range(x - 1, -1, -1):
+            y1 += 1
+            if y1 < 8 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+                #print('x', board[y1][i], (i, y1))
+            elif y1 < 8:
+                if type(board[y1][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    #print('e', board[y1][i], (i, y1))
+                    break
+
+        y1 = y
+        for i in range(x - 1, -1, -1):
+            y1 -= 1
+            if y1 >= 0 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 >= 0:
+                if type(board[y1][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+        return sl
 
 #################
 #################
@@ -171,6 +373,51 @@ class Black_Rook(pygame.sprite.Sprite):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
 
+    def true_xod(self, board, x, y):
+        print(x, y)
+        sl = {'xod': [], 'eat': []}  # проверка выхода за границы + еда чужих
+
+        for i in range(x + 1, 8):
+            if board[y][i] == 0 and y < 8:
+                sl['xod'].append((i, y))
+            elif y < 8:
+                if type(board[y][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y))
+                    break
+
+        for i in range(x - 1, -1, -1):
+            if board[y][i] == 0 and y >= 0:
+                sl['xod'].append((i, y))
+            elif y >= 0:
+                if type(board[y][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y))
+                    break
+
+        for i in range(y + 1, 8):
+            if board[i][x] == 0 and x < 8:
+                sl['xod'].append((x, i))
+            elif x < 8:
+                if type(board[i][x]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((x, i))
+                    break
+
+        for i in range(y - 1, -1, -1):
+            if board[i][x] == 0 and x >= 0:
+                sl['xod'].append((x, i))
+            elif x >= 0:
+                if type(board[i][x]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((x, i))
+                    break
+        return sl
+
 
 class White_Rook(pygame.sprite.Sprite):
     image = load_image("Белая ладья.png", -1)
@@ -185,6 +432,51 @@ class White_Rook(pygame.sprite.Sprite):
     def set_cord(self, x, y):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
+
+    def true_xod(self, board, x, y):
+        print(x, y)
+        sl = {'xod': [], 'eat': []}  # проверка выхода за границы + еда чужих
+
+        for i in range(x + 1, 8):
+            if board[y][i] == 0 and y < 8:
+                sl['xod'].append((i, y))
+            elif y < 8:
+                if type(board[y][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y))
+                    break
+
+        for i in range(x - 1, -1, -1):
+            if board[y][i] == 0 and y >= 0:
+                sl['xod'].append((i, y))
+            elif y >= 0:
+                if type(board[y][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y))
+                    break
+
+        for i in range(y + 1, 8):
+            if board[i][x] == 0 and x < 8:
+                sl['xod'].append((x, i))
+            elif x < 8:
+                if type(board[i][x]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((x, i))
+                    break
+
+        for i in range(y - 1, -1, -1):
+            if board[i][x] == 0 and x >= 0:
+                sl['xod'].append((x, i))
+            elif x >= 0:
+                if type(board[i][x]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((x, i))
+                    break
+        return sl
 
 
 #################
@@ -205,6 +497,100 @@ class Black_Queen(pygame.sprite.Sprite):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
 
+    def true_xod(self, board, x, y):
+        print(x, y)
+        sl = {'xod': [], 'eat': []}  # проверка выхода за границы + еда чужих
+        y1 = y
+        for i in range(x + 1, 8):
+            y1 += 1
+            if y1 < 8 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 < 8:
+                if type(board[y1][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        y1 = y
+        for i in range(x + 1, 8):
+            y1 -= 1
+            if y1 >= 0 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 >= 0:
+                if type(board[y1][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        y1 = y
+        for i in range(x - 1, -1, -1):
+            y1 += 1
+            if y1 < 8 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+                #print('x', board[y1][i], (i, y1))
+            elif y1 < 8:
+                if type(board[y1][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    #print('e', board[y1][i], (i, y1))
+                    break
+
+        y1 = y
+        for i in range(x - 1, -1, -1):
+            y1 -= 1
+            if y1 >= 0 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 >= 0:
+                if type(board[y1][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        for i in range(x + 1, 8):
+            if board[y][i] == 0 and y < 8:
+                sl['xod'].append((i, y))
+            elif y < 8:
+                if type(board[y][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y))
+                    break
+
+        for i in range(x - 1, -1, -1):
+            if board[y][i] == 0 and y >= 0:
+                sl['xod'].append((i, y))
+            elif y >= 0:
+                if type(board[y][i]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((i, y))
+                    break
+
+        for i in range(y + 1, 8):
+            if board[i][x] == 0 and x < 8:
+                sl['xod'].append((x, i))
+            elif x < 8:
+                if type(board[i][x]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((x, i))
+                    break
+
+        for i in range(y - 1, -1, -1):
+            if board[i][x] == 0 and x >= 0:
+                sl['xod'].append((x, i))
+            elif x >= 0:
+                if type(board[i][x]) in black_f:
+                    break
+                else:
+                    sl['eat'].append((x, i))
+                    break
+        return sl
+
 
 class White_Queen(pygame.sprite.Sprite):
     image = load_image("Белый ферзь.png", -1)
@@ -219,6 +605,100 @@ class White_Queen(pygame.sprite.Sprite):
     def set_cord(self, x, y):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
+
+    def true_xod(self, board, x, y):
+        print(x, y)
+        sl = {'xod': [], 'eat': []}  # проверка выхода за границы + еда чужих
+        y1 = y
+        for i in range(x + 1, 8):
+            y1 += 1
+            if y1 < 8 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 < 8:
+                if type(board[y1][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        y1 = y
+        for i in range(x + 1, 8):
+            y1 -= 1
+            if y1 >= 0 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 >= 0:
+                if type(board[y1][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        y1 = y
+        for i in range(x - 1, -1, -1):
+            y1 += 1
+            if y1 < 8 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+                #print('x', board[y1][i], (i, y1))
+            elif y1 < 8:
+                if type(board[y1][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    #print('e', board[y1][i], (i, y1))
+                    break
+
+        y1 = y
+        for i in range(x - 1, -1, -1):
+            y1 -= 1
+            if y1 >= 0 and board[y1][i] == 0:
+                sl['xod'].append((i, y1))
+            elif y1 >= 0:
+                if type(board[y1][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y1))
+                    break
+
+        for i in range(x + 1, 8):
+            if board[y][i] == 0 and y < 8:
+                sl['xod'].append((i, y))
+            elif y < 8:
+                if type(board[y][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y))
+                    break
+
+        for i in range(x - 1, -1, -1):
+            if board[y][i] == 0 and y >= 0:
+                sl['xod'].append((i, y))
+            elif y >= 0:
+                if type(board[y][i]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((i, y))
+                    break
+
+        for i in range(y + 1, 8):
+            if board[i][x] == 0 and x < 8:
+                sl['xod'].append((x, i))
+            elif x < 8:
+                if type(board[i][x]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((x, i))
+                    break
+
+        for i in range(y - 1, -1, -1):
+            if board[i][x] == 0 and x >= 0:
+                sl['xod'].append((x, i))
+            elif x >= 0:
+                if type(board[i][x]) in white_f:
+                    break
+                else:
+                    sl['eat'].append((x, i))
+                    break
+        return sl
 
 #################
 #################
@@ -238,6 +718,51 @@ class Black_King(pygame.sprite.Sprite):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
 
+    def true_xod(self, board, x, y):
+        sl = {'xod': [], 'eat': []}
+        if (y + 1 < 8) and (x + 1 < 8) and (board[y + 1][x + 1] == 0):
+            sl['xod'].append((x + 1, y + 1))
+        if (y + 1 < 8) and board[y + 1][x] == 0:
+            sl['xod'].append((x, y + 1))
+        if (y + 1 < 8) and (x - 1 >= 0) and board[y + 1][x - 1] == 0:
+            sl['xod'].append((x - 1, y + 1))
+        if (x + 1 < 8) and board[y][x + 1] == 0:
+            sl['xod'].append((x + 1, y))
+        if (x - 1 >= 0) and board[y][x - 1] == 0:
+            sl['xod'].append((x - 1, y))
+        if (y - 1 >= 0) and (x - 1 >= 0) and board[y - 1][x - 1] == 0:
+            sl['xod'].append((x - 1, y - 1))
+        if (y - 1 >= 0) and board[y - 1][x] == 0:
+            sl['xod'].append((x, y - 1))
+        if (y - 1 >= 0) and (x + 1 < 8) and board[y - 1][x + 1] == 0:
+            sl['xod'].append((x + 1, y - 1))
+            # кушаем
+        if (y + 1 < 8) and (x + 1 < 8) and (board[y + 1][x + 1] != 0):
+            if type(board[y + 1][x + 1]) not in black_f:
+                sl['eat'].append((x + 1, y + 1))
+        if (y + 1 < 8) and board[y + 1][x] != 0:
+            if type(board[y + 1][x]) not in black_f:
+                sl['eat'].append((x, y + 1))
+        if (y + 1 < 8) and (x - 1 >= 0) and board[y + 1][x - 1] != 0:
+            if type(board[y + 1][x - 1]) not in black_f:
+                sl['eat'].append((x - 1, y + 1))
+        if (x + 1 < 8) and board[y][x + 1] != 0:
+            if type(board[y][x + 1]) not in black_f:
+                sl['eat'].append((x + 1, y))
+        if (x - 1 >= 0) and board[y][x - 1] != 0:
+            if type(board[y][x - 1]) not in black_f:
+                sl['eat'].append((x - 1, y))
+        if (y - 1 >= 0) and (x - 1 >= 0) and board[y - 1][x - 1] != 0:
+            if type(board[y - 1][x - 1]) not in black_f:
+                sl['eat'].append((x - 1, y - 1))
+        if (y - 1 >= 0) and board[y - 1][x] != 0:
+            if type(board[y - 1][x]) not in black_f:
+                sl['eat'].append((x, y - 1))
+        if (y - 1 >= 0) and (x + 1 < 8) and board[y - 1][x + 1] != 0:
+            if type(board[y - 1][x + 1]) not in black_f:
+                sl['eat'].append((x + 1, y - 1))
+        return sl
+
 
 class White_King(pygame.sprite.Sprite):
     image = load_image("Белый король.png", -1)
@@ -253,11 +778,58 @@ class White_King(pygame.sprite.Sprite):
         self.rect.x = 80 + x * 70
         self.rect.y = 10 + y * 70
 
+    def true_xod(self, board, x, y):
+        sl = {'xod': [], 'eat': []}
+        if (y + 1 < 8) and (x + 1 < 8) and (board[y + 1][x + 1] == 0):
+            sl['xod'].append((x + 1, y + 1))
+        if (y + 1 < 8) and board[y + 1][x] == 0:
+            sl['xod'].append((x, y + 1))
+        if (y + 1 < 8) and (x - 1 >= 0) and board[y + 1][x - 1] == 0:
+            sl['xod'].append((x - 1, y + 1))
+        if (x + 1 < 8) and board[y][x + 1] == 0:
+            sl['xod'].append((x + 1, y))
+        if (x - 1 >= 0) and board[y][x - 1] == 0:
+            sl['xod'].append((x - 1, y))
+        if (y - 1 >= 0) and (x - 1 >= 0) and board[y - 1][x - 1] == 0:
+            sl['xod'].append((x - 1, y - 1))
+        if (y - 1 >= 0) and board[y - 1][x] == 0:
+            sl['xod'].append((x, y - 1))
+        if (y - 1 >= 0) and (x + 1 < 8) and board[y - 1][x + 1] == 0:
+            sl['xod'].append((x + 1, y - 1))
+            # кушаем
+        if (y + 1 < 8) and (x + 1 < 8) and (board[y + 1][x + 1] != 0):
+            if type(board[y + 1][x + 1]) not in white_f:
+                sl['eat'].append((x + 1, y + 1))
+        if (y + 1 < 8) and board[y + 1][x] != 0:
+            if type(board[y + 1][x]) not in white_f:
+                sl['eat'].append((x, y + 1))
+        if (y + 1 < 8) and (x - 1 >= 0) and board[y + 1][x - 1] != 0:
+            if type(board[y + 1][x - 1]) not in white_f:
+                sl['eat'].append((x - 1, y + 1))
+        if (x + 1 < 8) and board[y][x + 1] != 0:
+            if type(board[y][x + 1]) not in white_f:
+                sl['eat'].append((x + 1, y))
+        if (x - 1 >= 0) and board[y][x - 1] != 0:
+            if type(board[y][x - 1]) not in white_f:
+                sl['eat'].append((x - 1, y))
+        if (y - 1 >= 0) and (x - 1 >= 0) and board[y - 1][x - 1] != 0:
+            if type(board[y - 1][x - 1]) not in white_f:
+                sl['eat'].append((x - 1, y - 1))
+        if (y - 1 >= 0) and board[y - 1][x] != 0:
+            if type(board[y - 1][x]) not in white_f:
+                sl['eat'].append((x, y - 1))
+        if (y - 1 >= 0) and (x + 1 < 8) and board[y - 1][x + 1] != 0:
+            if type(board[y - 1][x + 1]) not in white_f:
+                sl['eat'].append((x + 1, y - 1))
+        return sl
+
 
 ################
 ################
+
 
 class Board:
+
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -335,13 +907,21 @@ class Board:
             if (x, y) in self.xod_user[3]['xod']:
                 self.board[y][x] = self.board[self.xod_user[2]][self.xod_user[1]]
                 self.board[self.xod_user[2]][self.xod_user[1]] = 0
+            elif (x, y) in self.xod_user[3]['eat']:
+                self.board[y][x].kill()  # уничтожаем спрайт
+                self.board[y][x] = self.board[self.xod_user[2]][self.xod_user[1]]
+                self.board[self.xod_user[2]][self.xod_user[1]] = 0
+            self.show()
+            self.xod_user[0] = (self.xod_user[0] + 1) % 2
+            self.calc_cord()
         else:
             self.xod_user[1] = cell[0]
             self.xod_user[2] = cell[1]
-            print(self.board[cell[1]][cell[0]].true_xod(self.board, cell[0], cell[1]))
-            self.xod_user[3] = self.board[cell[1]][cell[0]].true_xod(self.board, cell[0], cell[1])
-        self.xod_user[0] = (self.xod_user[0] + 1) % 2
-        self.calc_cord()
+            if self.board[cell[1]][cell[0]] != 0:
+                self.xod_user[3] = self.board[cell[1]][cell[0]].true_xod(self.board, cell[0], cell[1])
+                print('!', self.board[cell[1]][cell[0]].true_xod(self.board, cell[0], cell[1]))
+                self.xod_user[0] = (self.xod_user[0] + 1) % 2
+                self.calc_cord()
 
     def calc_cord(self):
         for i in range(8):
@@ -354,14 +934,25 @@ class Board:
         if cord is not None:
             self.on_click(cord)
 
-    def render(self, surface):
-        for x, y in product(range(self.width), range(self.height)):
-            pygame.draw.rect(surface, 'black', (self.x + self.size * x, self.y + self.size * y,
-                                                self.size, self.size), width=1)
+    def render(self, surface):  # 125, 147, 93    235, 236, 211
+        colors = [(125, 147, 93), (235, 236, 211)]
+        col = 0
+        for y in range(self.height):
+            col = (col + 1) % 2
+            for x in range(self.width):
+                pygame.draw.rect(screen, colors[col],
+                    (self.x + self.size * x, self.y + self.size * y, self.size, self.size))
+                pygame.draw.rect(screen, (0, 0, 0),
+                    (self.x + self.size * x, self.y + self.size * y, self.size, self.size), 1)
+                col = (col + 1) % 2
+
+
 ####################
 ####################
 
 
+black_f = [Black_Pawn, Black_Knight, Black_Bishop, Black_Rook, Black_Queen, Black_King]
+white_f = [White_Pawn, White_Knight, White_Bishop, White_Rook, White_Queen, White_King]
 board = Board(8, 8)
 board.set_view(80, 10, 70)
 board.show()
@@ -377,8 +968,8 @@ while running:
         #     board.show()
 
     screen.fill((255, 255, 255))
-    all_sprites.draw(screen)
     board.render(screen)
+    all_sprites.draw(screen)
     pygame.display.flip()
 
 pygame.quit()
