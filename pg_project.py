@@ -28,7 +28,7 @@ def load_image(name, colorkey=None):
 
 
 class Black_Pawn(pygame.sprite.Sprite):
-    image = load_image("Черная пешка.png", -1)
+    image = load_image("b_p.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -48,18 +48,20 @@ class Black_Pawn(pygame.sprite.Sprite):
                 sl['xod'].append((x, y + 2))
         if board[y + 1][x] == 0:
             sl['xod'].append((x, y + 1))
-        #кушаем
-        if board[y + 1][x + 1] != 0:
+        # кушаем
+        if x + 1 <= 7 and board[y + 1][x + 1] != 0:
             if type(board[y + 1][x + 1]) not in black_f:
                 sl['eat'].append((x + 1, y + 1))
-        if board[y + 1][x - 1] != 0:
+        if x - 1 >= 0 and board[y + 1][x - 1] != 0:
             if type(board[y + 1][x - 1]) not in black_f:
                 sl['eat'].append((x - 1, y + 1))
+        if y == 7:
+            pass
         return sl
 
 
 class White_Pawn(pygame.sprite.Sprite):
-    image = load_image("Белая пешка.png", -1)
+    image = load_image("w_p.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -79,13 +81,15 @@ class White_Pawn(pygame.sprite.Sprite):
                 sl['xod'].append((x, y - 2))
         if board[y - 1][x] == 0:
             sl['xod'].append((x, y - 1))
-        #кушаем
-        if board[y - 1][x + 1] != 0:
+        # кушаем
+        if x + 1 <= 7 and board[y - 1][x + 1] != 0:
             if type(board[y - 1][x + 1]) not in white_f:
                 sl['eat'].append((x + 1, y - 1))
-        if board[y - 1][x - 1] != 0:
+        if x - 1 >= 0 and board[y - 1][x - 1] != 0:
             if type(board[y - 1][x - 1]) not in white_f:
                 sl['eat'].append((x - 1, y - 1))
+        if y == 0:
+            pass
         return sl
 
 ######################
@@ -93,7 +97,7 @@ class White_Pawn(pygame.sprite.Sprite):
 
 
 class Black_Knight(pygame.sprite.Sprite):
-    image = load_image("Черный конь.png", -1)
+    image = load_image("b_kn.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -154,7 +158,7 @@ class Black_Knight(pygame.sprite.Sprite):
 
 
 class White_Knight(pygame.sprite.Sprite):
-    image = load_image("Белый конь.png", -1)
+    image = load_image("w_kn.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -218,7 +222,7 @@ class White_Knight(pygame.sprite.Sprite):
 
 
 class Black_Bishop(pygame.sprite.Sprite):
-    image = load_image("Черный слон.png", -1)
+    image = load_image("b_b.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -288,7 +292,7 @@ class Black_Bishop(pygame.sprite.Sprite):
 
 
 class White_Bishop(pygame.sprite.Sprite):
-    image = load_image("Белый слон.png", -1)
+    image = load_image("w_b.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -360,7 +364,7 @@ class White_Bishop(pygame.sprite.Sprite):
 
 
 class Black_Rook(pygame.sprite.Sprite):
-    image = load_image("Черная ладья.png", -1)
+    image = load_image("b_r.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -420,7 +424,7 @@ class Black_Rook(pygame.sprite.Sprite):
 
 
 class White_Rook(pygame.sprite.Sprite):
-    image = load_image("Белая ладья.png", -1)
+    image = load_image("w_r.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -484,7 +488,7 @@ class White_Rook(pygame.sprite.Sprite):
 
 
 class Black_Queen(pygame.sprite.Sprite):
-    image = load_image("Черный ферзь.png", -1)
+    image = load_image("b_q.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -593,7 +597,7 @@ class Black_Queen(pygame.sprite.Sprite):
 
 
 class White_Queen(pygame.sprite.Sprite):
-    image = load_image("Белый ферзь.png", -1)
+    image = load_image("w_q.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -705,7 +709,7 @@ class White_Queen(pygame.sprite.Sprite):
 
 
 class Black_King(pygame.sprite.Sprite):
-    image = load_image("Черный король.png", -1)
+    image = load_image("b_k.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
@@ -765,7 +769,7 @@ class Black_King(pygame.sprite.Sprite):
 
 
 class White_King(pygame.sprite.Sprite):
-    image = load_image("Белый король.png", -1)
+    image = load_image("w_k.png", -1)
 
     def __init__(self, x, y, *group):
         super().__init__(*group)
