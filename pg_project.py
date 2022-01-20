@@ -11,7 +11,7 @@ all_sprites = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
-    fullname = os.path.join('/Users/roman/PycharmProjects/pythonProject10', name)
+    fullname = os.path.join('data/', name)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
