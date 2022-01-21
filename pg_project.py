@@ -881,6 +881,8 @@ class Board:
         self.y = 10
         self.size = 30
         self.xod_user = [0, 0, 0, 0]
+        self.coords_circle_xod = []
+        self.coords_circle_eat = []
 
     def show(self):
         for i in self.board:
@@ -905,7 +907,15 @@ class Board:
         return board_x, board_y
 
     def on_click(self, cell):
+        if self.board[cell[1]][cell[0]] != 0:
+            for i in self.board[cell[1]][cell[0]].true_xod(self.board, cell[0], cell[1])['xod']:
+                self.coords_circle_xod.append(i)
+            for i in self.board[cell[1]][cell[0]].true_xod(self.board, cell[0], cell[1])['eat']:
+                self.coords_circle_eat.append(i)
+
         if self.xod_user[0] == 1:
+            self.coords_circle_xod = []
+            self.coords_circle_eat = []
             x = cell[0]
             y = cell[1]
             if (x, y) in self.xod_user[3]['xod']:
@@ -974,6 +984,14 @@ while running:
     screen.fill((255, 255, 255))
     board.render(screen)
     all_sprites.draw(screen)
+    if board.coords_circle_xod != []:
+        for i in board.coords_circle_xod:
+            pygame.draw.circle(screen, (255, 255, 0), (board.x + board.size * i[0] + 35,
+                                                 board.y + board.size * i[1] + 35), 35)
+    if board.coords_circle_eat != []:
+        for i in board.coords_circle_eat:
+            pygame.draw.circle(screen, (255, 0, 0, 50), (board.x + board.size * i[0] + 35,
+                                                       board.y + board.size * i[1] + 35), 35)
     pygame.display.flip()
 
 pygame.quit()
